@@ -19,29 +19,15 @@ public class EspecialidadeService {
     @Autowired
     private EspecialidadeRepository especialidadeRepository;
 
-    /**
-     *
-     * @param id
-     * @return
-     */
     public Optional<Especialidade> findById(Long id){
         return this.especialidadeRepository.findById(id);
     }
 
-    /**
-     *
-     * @param pageable
-     * @return
-     */
+
     public Page<Especialidade> listAll(Pageable pageable){
         return this.especialidadeRepository.findAll(pageable);
     }
 
-    /**
-     *
-     * @param id
-     * @param especialidade
-     */
     @Transactional
     public void update(Long id, Especialidade especialidade){
         if (id == especialidade.getId()) {
@@ -52,20 +38,13 @@ public class EspecialidadeService {
         }
     }
 
-    /**
-     *
-     * @param especialidade
-     */
+
     @Transactional
     public void insert(Especialidade especialidade){
         this.especialidadeRepository.save(especialidade);
     }
 
-    /**
-     *
-     * @param id
-     * @param especialidade
-     */
+
     @Transactional
     public void updateStatus(Long id, Especialidade especialidade){
         if (id == especialidade.getId()) {
