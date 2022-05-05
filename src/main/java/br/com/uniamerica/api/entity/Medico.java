@@ -40,13 +40,7 @@ public class Medico extends Pessoa {
     @ManyToOne(fetch = FetchType.LAZY)
     private Especialidade especialidade;
 
-    /**
-     * @see Pessoa#Pessoa(Long, String)
-     *
-     * @param id
-     * @param nome
-     * @param crm
-     */
+
     public Medico(Long id, String nome, String crm){
         super(id, nome);
         this.crm = crm;

@@ -37,4 +37,7 @@ public class MedicoService {
     public void insert(Medico medico){
         this.medicoRepository.save(medico);
     }
+
+
+
 }
