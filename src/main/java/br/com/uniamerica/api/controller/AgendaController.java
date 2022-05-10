@@ -13,12 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 07/04/2022
- * @version 1.0.0
- */
+
 @Controller
 @RequestMapping("/api/agendas")
 public class AgendaController {
