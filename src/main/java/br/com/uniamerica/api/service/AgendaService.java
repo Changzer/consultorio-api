@@ -27,11 +27,11 @@ public class AgendaService {
     }
 
     public List<Agenda> selectAllValidation(LocalDateTime dateFrom, LocalDateTime dateTo) {
-        return this.agendaRepository.findAllValidationPaciente(dateFrom, dateTo);
+        return this.agendaRepository.findAllCrossSchedulePaciente(dateFrom, dateTo);
     }
 
     public List<Agenda> selectAllValidationUpdate(Long id, LocalDateTime dateFrom, LocalDateTime dateTo) {
-        return this.agendaRepository.findAllValidationUpdate(id, dateFrom, dateTo);
+        return this.agendaRepository.findAllCrossSchedule(id, dateFrom, dateTo);
     }
 
 
@@ -69,8 +69,8 @@ public class AgendaService {
                 throw new RuntimeException();
             }
         }
-        List<Agenda> validador = this.selectAllValidationUpdate(agenda.getId(), agenda.getDateFrom(), agenda.getDateTo());
-        if (validador.size() > 0) {
+       List<Agenda> validador = this.selectAllValidationUpdate(agenda.getId(), agenda.getDateFrom(), agenda.getDateTo());
+       if (validador.size() > 0) {
 
         }
     }

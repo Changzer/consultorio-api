@@ -18,30 +18,30 @@ import java.util.List;
  */
 @Repository
 public interface AgendaRepository extends JpaRepository<Agenda, Long> {
-    @Query("from Agenda agenda "+
-    "where :dateFrom between agenda.dateFrom and agenda.dateTo " +
-    "and :dateTo between agenda.dateFrom and agenda.dateTo")
-
-    public List<Agenda> findAllValidationPaciente(
-            @Param("dateFrom")LocalDateTime dateFrom,
-            @Param("dateTo")LocalDateTime dateTo
-            );
 
     @Query("from Agenda agenda " +
-    "where agenda.id <> :idAgendaSent " +
-    "and :dateFrom between agenda.dateFrom and agenda.dateTo " +
-    "and :dateTo between agenda.dateFrom and agenda.dateTo")
+            "where :dateFrom BETWEEN agenda.dateFrom and agenda.dateTo " +
+            "and :dateTo BETWEEN agenda.dateFrom and agenda.dateTo")
+    public List<Agenda> findAllCrossSchedulePaciente(
+            @Param("dateFrom")LocalDateTime dateFrom,
+            @Param("dateTo") LocalDateTime dateTo);
 
-    public List<Agenda> FindAllValidationUpdate(
-            @Param("idAgendaSent") Long idAgendaSent,
+
+    //ache todos aqueles, deferentes de mim, que os horarios se sobrepoem
+
+    @Query("from Agenda agenda " +
+            "where agenda.id <> :idAgendaPassado " +
+            "and :dateFrom BETWEEN agenda.dateFrom and agenda.dateTo " +
+            "and :dateTo BETWEEN agenda.dateFrom and agenda.dateTo")
+    public List<Agenda> findAllCrossSchedule(
+            @Param("idAgendaPassado") Long idAgendaPassado,
             @Param("dateFrom") LocalDateTime dateFrom,
-            @Param("dateTo") LocalDateTime dateTo
-    );
+            @Param("dateTo") LocalDateTime dateTo);
 
     @Modifying
-    @Query("update Agenda agenda set agenda.excluido = :dataExcluido where agenda.id = :idSent")
-    public void updateStatusExcluido(@Param("dataExcluido") LocalDateTime dataExcluido,
-                                     @Param("idSent") Long idSent);
+    @Query("update Agenda agenda set agenda.excluido = :dataExcluido where agenda.id = :idPassado")
+    public void updateStatusExcluido(@Param("dataExcluido") LocalDateTime dataExcluido,@Param("idPassado")  Long idPassado);
 
-    List<Agenda> findAllValidationUpdate(Long id, LocalDateTime dataDe, LocalDateTime dataAte);
+
+
 }
