@@ -9,31 +9,33 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "agendas", schema = "public")
-@NoArgsConstructor
-public class Agenda extends AbstractEntity{
+public class Agenda extends AbstractEntity {
+
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "paciente_id")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private StatusAgenda status;
+
+    @Getter @Setter
+    @Column(nullable = false, name = "data_de")
+    private LocalDateTime dataDe;
+
+    @Getter @Setter
+    @Column(nullable = false, name = "data_ate")
+    private LocalDateTime dataAte;
+
+    @Getter @Setter
+    @Column(name = "encaixe", columnDefinition = "BOOLEAN DEFAULT FALSE", nullable = false)
+    private Boolean encaixe;
+
+    @Getter @Setter
+    @JoinColumn(name = "id_paciente", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Paciente paciente;
 
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "medico_id",nullable = false)
+    @JoinColumn(name = "id_medico", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Medico medico;
-
-    @Getter @Setter
-    @Column(nullable = false, name = "status")
-    @Enumerated(EnumType.STRING)
-    private StatusAgendamento statusAgendamento;
-
-    @Getter @Setter @Column(name = "dateFrom", nullable = false)
-    private LocalDateTime dateFrom;
-
-    @Getter @Setter @Column(name = "dateTo", nullable = false)
-    private LocalDateTime dateTo;
-
-    @Getter @Setter @Column(name = "encaixe", columnDefinition = "boolean Default false")
-    private Boolean encaixe;
-
 
 }

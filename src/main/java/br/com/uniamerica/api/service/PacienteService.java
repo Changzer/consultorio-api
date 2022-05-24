@@ -47,7 +47,7 @@ public class PacienteService {
 
 public void validarFormulario(Paciente paciente){
     if(paciente.getTipoAtendimento().equals(TipoAtendimento.convenio)){
-        if(paciente.getConvenio().getId() == null){
+        if(paciente.getConvenio() == null || paciente.getConvenio().getId() == null){
             throw new RuntimeException("numero do convenio nao informado");
         }
         if(paciente.getNumeroCartaoConvenio() == null){
