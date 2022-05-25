@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -216,42 +217,19 @@ public class AgendaService {
 //        }
 //    }
     public void updateAgenda(Agenda agenda, Secretaria secretaria){
-        if(!isPast(agenda)){
-            if(validTime(agenda)){
-                if(isRightTime(agenda)){
-                    if(!isWeekend(agenda)){
-                        if(!isEncaixe(agenda)){
-                            if(checkConflictMedico(agenda)){
-                                if(checkConflictPaciente(agenda)){
-                                    agenda.setStatus(StatusAgenda.aprovado);
-                                    updateAgendaTransaction(agenda);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        Assert.isTrue(!isPast(agenda), "esta no Passado");
+        Assert.isTrue(validTime(agenda), "Hora ATE antes de hora DE");
+        Assert.isTrue(isRightTime(agenda),"Agendamento fora de horario comercial");
+        Assert.isTrue(!isWeekend(agenda),"Agendamento no fim de semana");
+
+        if(!isEncaixe(agenda)){
+            Assert.isTrue(checkConflictMedico(agenda),"O Medico já tem esse horario ocupado");
+            Assert.isTrue(checkConflictPaciente(agenda),"O Paciente nao pode marcar duas consultas no mesmo horario");
         }
+        updateAgendaTransaction(agenda);
     }
 
-    public void updateAgenda(Agenda agenda){
-        if(!isPast(agenda)){
-            if(validTime(agenda)){
-                if(isRightTime(agenda)){
-                    if(!isWeekend(agenda)){
-                        if(!isEncaixe(agenda)){
-                            if(checkConflictMedico(agenda)){
-                                if(checkConflictPaciente(agenda)){
-                                    agenda.setStatus(StatusAgenda.pendente);
-                                    updateAgendaTransaction(agenda);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+
 
     public void insertAgenda(Agenda agenda, Secretaria secretaria){
         if(!isPast(agenda)){
@@ -262,7 +240,7 @@ public class AgendaService {
                             if(checkConflictMedico(agenda)){
                                 if(checkConflictPaciente(agenda)){
                                     agenda.setStatus(StatusAgenda.aprovado);
-                                    updateAgenda(agenda);
+                                    updateAgendaTransaction(agenda);
                                 }
                             }
                         }
@@ -281,7 +259,7 @@ public class AgendaService {
                             if(checkConflictMedico(agenda)){
                                 if(checkConflictPaciente(agenda)){
                                     agenda.setStatus(StatusAgenda.pendente);
-                                    updateAgenda(agenda);
+                                    updateAgendaTransaction(agenda);
                                 }
                             }
                         }
