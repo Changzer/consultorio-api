@@ -205,18 +205,8 @@ public class AgendaService {
 //                agenda.getId());
 //
 //    }
-//
-//    public void updateAgendaProfessor(Agenda agenda){
-//        Assert.isTrue(!isPast(agenda), "Esta no Passado");
-//        Assert.isTrue(validTime(agenda), "Hora ate antes de hora de");
-//        Assert.isTrue(isRightTime(agenda), "Agendamento fora de horario comercial");
-//        Assert.isTrue(!isWeekend(agenda), "Agendamento no fim de semana");
-//        Assert.isTrue();
-//        if(isEncaixe(agenda)){
-//
-//        }
-//    }
-    public void updateAgenda(Agenda agenda, Secretaria secretaria){
+
+    public void updateAgenda(Long idAgenda, Agenda agenda){
         Assert.isTrue(!isPast(agenda), "esta no Passado");
         Assert.isTrue(validTime(agenda), "Hora ATE antes de hora DE");
         Assert.isTrue(isRightTime(agenda),"Agendamento fora de horario comercial");

@@ -1,15 +1,14 @@
 package br.com.uniamerica.api.controller;
 
 import br.com.uniamerica.api.entity.Agenda;
-import br.com.uniamerica.api.repository.AgendaRepository;
+import br.com.uniamerica.api.service.AgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -19,15 +18,15 @@ import java.util.List;
 public class AgendaController {
 
     @Autowired
-    public AgendaRepository agendaRepository;
+    public AgendaService agendaService;
 
     /**
      *
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<Agenda>> listAllAgendas(){
-        return new ResponseEntity<>(agendaRepository.findAll(), HttpStatus.OK) ;
+    public ResponseEntity<Page<Agenda>> listAllAgendas(Pageable pageable){
+        return ResponseEntity.ok().body(this.agendaService.listAll(pageable));
     }
 
     /**
@@ -35,9 +34,23 @@ public class AgendaController {
      * @param agenda
      * @return
      */
-    @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody List<Agenda> agenda){
-        agendaRepository.saveAll(agenda);
-        return new ResponseEntity<>("Registro Cadastrado", HttpStatus.OK);
+
+    //  @PostMapping
+    //public ResponseEntity<?> cadastrar(@RequestBody List<Agenda> agenda){
+    //    agendaService.saveAll(agenda);
+    //    return new ResponseEntity<>("Registro Cadastrado", HttpStatus.OK);
+    //}
+
+    @PutMapping("/update/{idAgenda}")
+    public ResponseEntity<?> updateAgenda(
+            @RequestBody Agenda agenda,
+            @PathVariable Long idAgenda){
+        try{
+            this.agendaService.updateAgenda(idAgenda,agenda);
+            return ResponseEntity.ok().body("agenda atualizada");
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
+
 }
