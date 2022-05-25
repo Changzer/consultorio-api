@@ -196,15 +196,6 @@ public class AgendaService {
         this.agendaRepository.save(agenda);
     }
 
-    //    public boolean checkConflictProfessor(Agenda agenda){
-//        List<Agenda> conflitos = this.agendaRepository.haveConflict(
-//                agenda.getDataDe(),
-//                agenda.getDataAte(),
-//                agenda.getMedico().getId(),
-//                agenda.getPaciente().getId(),
-//                agenda.getId());
-//
-//    }
 
     public void updateAgenda(Long idAgenda, Agenda agenda){
         Assert.isTrue(!isPast(agenda), "esta no Passado");
@@ -220,42 +211,17 @@ public class AgendaService {
     }
 
 
-
-    public void insertAgenda(Agenda agenda, Secretaria secretaria){
-        if(!isPast(agenda)){
-            if(validTime(agenda)){
-                if(isRightTime(agenda)){
-                    if(!isWeekend(agenda)){
-                        if(!isEncaixe(agenda)){
-                            if(checkConflictMedico(agenda)){
-                                if(checkConflictPaciente(agenda)){
-                                    agenda.setStatus(StatusAgenda.aprovado);
-                                    updateAgendaTransaction(agenda);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     public void insertAgenda(Agenda agenda){
-        if(!isPast(agenda)){
-            if(validTime(agenda)){
-                if(isRightTime(agenda)){
-                    if(!isWeekend(agenda)){
-                        if(!isEncaixe(agenda)){
-                            if(checkConflictMedico(agenda)){
-                                if(checkConflictPaciente(agenda)){
-                                    agenda.setStatus(StatusAgenda.pendente);
-                                    updateAgendaTransaction(agenda);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        Assert.isTrue(!isPast(agenda),"esta no Passado");
+        Assert.isTrue(validTime(agenda), "Hora ATE antes de hora DE");
+        Assert.isTrue(isRightTime(agenda),"Agendamento fora de horario comercial");
+        Assert.isTrue(!isWeekend(agenda),"Agendamento no fim de semana");
+
+        if(!isEncaixe(agenda)){
+            Assert.isTrue(checkConflictMedico(agenda),"O Medico já tem esse horario ocupado");
+            Assert.isTrue(checkConflictPaciente(agenda),"O Paciente nao pode marcar duas consultas no mesmo horario");
         }
+        updateAgendaTransaction(agenda);
     }
+
 }
