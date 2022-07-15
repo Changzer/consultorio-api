@@ -14,6 +14,7 @@ import java.util.List;
 
 
 @Controller
+@CrossOrigin
 @RequestMapping("/api/agendas")
 public class AgendaController {
 

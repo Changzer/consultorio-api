@@ -17,6 +17,7 @@ import java.util.List;
 
 
 @Controller
+@CrossOrigin
 @RequestMapping("/api/especialidades")
 public class EspecialidadeController {
 
