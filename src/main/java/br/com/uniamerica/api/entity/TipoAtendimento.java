@@ -1,23 +1,15 @@
 package br.com.uniamerica.api.entity;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 22/03/2022
- * @version 1.0.0
- */
 public enum TipoAtendimento {
+    PARTICULAR("Particular"), CONVENIO("Convenio");
 
-    particular("Particular"),
-        convenio("Convênio");
+    private String descricao;
 
-    public final String valor;
+    TipoAtendimento(String descricao) {
+        this.descricao = descricao;
+    }
 
-    /**
-     *
-     * @param valor
-     */
-    private TipoAtendimento(String valor){
-        this.valor = valor;
+    public String getDescricao() {
+        return descricao;
     }
 }

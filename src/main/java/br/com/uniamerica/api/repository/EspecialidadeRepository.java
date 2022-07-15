@@ -16,10 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EspecialidadeRepository extends JpaRepository<Especialidade, Long> {
 
-    /**
-     *
-     * @param especialidade
-     */
+
     @Modifying
     @Query("UPDATE Especialidade especialidade " +
             "SET especialidade.excluido = now() " +

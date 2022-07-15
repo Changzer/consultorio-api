@@ -9,18 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 05/04/2022
- * @version 1.0.0
- */
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
+
     @Modifying
-    @Query("UPDATE Paciente paciente " +
-            "SET paciente.excluido = :data " +
-            "WHERE paciente.id = :paciente")
-    public void updateDataExcluido(@Param("data") LocalDateTime dataEx,
-                                   @Param("paciente") Long idPaciente);
+    @Query("update Paciente paciente set paciente.excluido = :dataExclusao where paciente.id = :idPassado")
+    public void updateStatusExcluido(@Param("dataExclusao") LocalDateTime dataExclusao, @Param("idPassado") Long idPassado);
 }

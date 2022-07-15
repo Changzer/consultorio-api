@@ -10,6 +10,9 @@ public enum Sexo {
 
     masculino("Masculino"),
         feminino("Feminino"),
+    MASCULINO("MASCULINO"),
+    FEMININO("FEMININO"),
+    OUTROS("OUTROS"),
             outro("Outro");
 
     public final String valor;

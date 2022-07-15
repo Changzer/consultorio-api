@@ -1,8 +1,10 @@
 package br.com.uniamerica.api.controller;
 
 import br.com.uniamerica.api.entity.Convenio;
-import br.com.uniamerica.api.repository.ConvenioRepository;
+import br.com.uniamerica.api.service.ConvenioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,26 +24,51 @@ import java.util.List;
 public class ConvenioController {
 
     @Autowired
-    public ConvenioRepository convenioRepository;
+    private ConvenioService convenioService;
 
-    /**
-     *
-     * @return
-     */
-    @GetMapping
-    public ResponseEntity<List<Convenio>> listAllConvenios(){
-        return new ResponseEntity<>(convenioRepository.findAll(), HttpStatus.OK) ;
+    @GetMapping("/{idConvenio}")
+    public ResponseEntity<Convenio> findById(
+            @PathVariable("idConvenio") Long idConvenio){
+        return ResponseEntity.ok().body(this.convenioService.findById(idConvenio).get());
     }
 
-    /**
-     *
-     * @param convenio
-     * @return
-     */
+    @GetMapping
+    public ResponseEntity<Page<Convenio>> listByAllPage(Pageable pageable){
+        return ResponseEntity.ok().body(this.convenioService.listAll(pageable));
+    }
+
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody Convenio convenio){
-        convenioRepository.save(convenio);
-        return new ResponseEntity<>("Registro Cadastrado", HttpStatus.OK);
+    public ResponseEntity<?> insert(@RequestBody Convenio convenio) {
+        try {
+            this.convenioService.insert(convenio);
+            return ResponseEntity.ok().body("convenio cadastrada com sucesso.");
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{idConvenio}")
+    public ResponseEntity<?> update(
+            @RequestBody Convenio convenio,
+            @PathVariable Long idConvenio){
+        try {
+            this.convenioService.update(idConvenio,convenio);
+            return ResponseEntity.ok().body("convenio atualizada com sucesso");
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/status/{idConvenio}")
+    public ResponseEntity<?> updateStatus(
+            @RequestBody Convenio convenio,
+            @PathVariable Long idConvenio){
+        try {
+            this.convenioService.updateStatus(idConvenio,convenio);
+            return ResponseEntity.ok().body("convenio atualizada com sucesso");
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

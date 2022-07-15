@@ -1,21 +1,30 @@
 package br.com.uniamerica.api.service;
 
 import br.com.uniamerica.api.entity.Convenio;
+import br.com.uniamerica.api.entity.Especialidade;
 import br.com.uniamerica.api.repository.ConvenioRepository;
+import br.com.uniamerica.api.repository.EspecialidadeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 
 @Service
 public class ConvenioService {
+
+    @Autowired
     private ConvenioRepository convenioRepository;
 
     public Optional<Convenio> findById(Long id){
         return this.convenioRepository.findById(id);
     }
+
 
     public Page<Convenio> listAll(Pageable pageable){
         return this.convenioRepository.findAll(pageable);
@@ -23,7 +32,7 @@ public class ConvenioService {
 
     @Transactional
     public void update(Long id, Convenio convenio){
-        if (id == convenio.getId()){
+        if (id == convenio.getId()) {
             this.convenioRepository.save(convenio);
         }
         else {
@@ -31,8 +40,20 @@ public class ConvenioService {
         }
     }
 
+
     @Transactional
     public void insert(Convenio convenio){
         this.convenioRepository.save(convenio);
+    }
+
+
+    @Transactional
+    public void updateStatus(Long id, Convenio convenio){
+        if (id == convenio.getId()) {
+            this.convenioRepository.updateStatus(convenio.getId());
+        }
+        else {
+            throw new RuntimeException();
+        }
     }
 }

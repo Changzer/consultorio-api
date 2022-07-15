@@ -27,17 +27,17 @@ public class Medico extends Pessoa {
 
     @Getter @Setter
     @Digits(integer = 3, fraction = 3)
-    @Column(name = "porcentagem_participacao", precision = 3, scale = 3, nullable = false)
-    private BigDecimal porcentagemParticipacao;
+    @Column(name = "porcentParticipacao", precision = 3, scale = 3, nullable = false)
+    private BigDecimal porcentParticipacao;
 
     @Getter @Setter
     @Digits(integer = 5, fraction = 3)
-    @Column(name = "valor_consulta", nullable = false, precision = 5, scale = 3, length = 50)
+    @Column(name = "valor_consulta", precision = 5, scale = 3, length = 50)
     private BigDecimal valorConsulta;
 
     @Getter @Setter
     @JoinColumn(name = "id_especialidade")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Especialidade especialidade;
 
 

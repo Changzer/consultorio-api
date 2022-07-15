@@ -1,10 +1,15 @@
 package br.com.uniamerica.api.controller;
 
 import br.com.uniamerica.api.entity.Agenda;
+import br.com.uniamerica.api.entity.Especialidade;
+import br.com.uniamerica.api.entity.Medico;
 import br.com.uniamerica.api.entity.Paciente;
 import br.com.uniamerica.api.repository.AgendaRepository;
 import br.com.uniamerica.api.repository.PacienteRepository;
+import br.com.uniamerica.api.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,26 +29,19 @@ import java.util.List;
 public class PacienteController {
 
     @Autowired
-    public PacienteRepository pacienteRepository;
+    public PacienteService pacienteService;
 
-    /**
-     *
-     * @return
-     */
     @GetMapping
-    public ResponseEntity<List<Paciente>> listAllPacientes(){
-        List<Paciente> pacientes = pacienteRepository.findAll();
-        return new ResponseEntity<>(pacienteRepository.findAll(), HttpStatus.OK) ;
+    public ResponseEntity<Page<Paciente>> listByAllPage(Pageable pageable){
+        return ResponseEntity.ok().body(this.pacienteService.listAll(pageable));
     }
-
-    /**
-     *
-     * @param paciente
-     * @return
-     */
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody Paciente paciente){
-        pacienteRepository.save(paciente);
-        return new ResponseEntity<>("Registro Cadastrado", HttpStatus.OK);
+    public ResponseEntity<?> insert(@RequestBody Paciente paciente) {
+        try {
+            this.pacienteService.insert(paciente);
+            return ResponseEntity.ok().body("paciente cadastrado com sucesso.");
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

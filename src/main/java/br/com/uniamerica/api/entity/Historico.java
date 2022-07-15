@@ -1,47 +1,42 @@
 package br.com.uniamerica.api.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
 import java.time.LocalDateTime;
 
-/**
- * @author Eduardo Sganderla
- *
- * @since 1.0.0, 22/03/2022
- * @version 1.0.0
- */
 @Entity
 @Table(name = "historicos", schema = "public")
-public class Historico extends AbstractEntity {
+@NoArgsConstructor
+public class Historico extends AbstractEntity{
 
-    @Getter @Setter
-    @Column(name = "data", nullable = false)
-    private LocalDateTime data;
+    @JoinColumn(name = "agenda_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Agenda agenda;
 
-    @Getter @Setter
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private StatusAgenda statusAgenda;
-
-    @Getter @Setter
-    @Column(name = "observacao", columnDefinition = "TEXT")
+    @Column(name = "observacao")
     private String observacao;
 
-    @Getter @Setter
-    @JoinColumn(name = "id_secretatia")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "secretaria_id")
+    @ManyToOne(fetch = FetchType.EAGER)
     private Secretaria secretaria;
 
-    @Getter @Setter
-    @JoinColumn(name = "id_paciente")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "paciente_id")
+    @ManyToOne(fetch = FetchType.EAGER)//pega todos os dados da secretaria, ao inves de somente o id
     private Paciente paciente;
 
-    @Getter @Setter
-    @JoinColumn(name = "id_agenda", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Agenda agenda;
+    @Column(name = "data_historico", nullable = false)
+    private LocalDateTime data;
+    @Enumerated(EnumType.STRING)
+    private StatusAgendamento statusAgenda;
+
+    public Historico(Agenda agenda, String observacao, Secretaria secretaria, Paciente paciente, StatusAgendamento statusAgendamento) {
+        this.agenda = agenda;
+        this.observacao = observacao;
+        this.secretaria = secretaria;
+        this.paciente = paciente;
+        this.statusAgenda = statusAgendamento;
+    }
 
 }
